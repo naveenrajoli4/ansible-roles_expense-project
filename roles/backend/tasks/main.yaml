@@ -50,7 +50,7 @@
 
 - name: Copy backemd.service file from ansible to remote server 
   ansible.builtin.templates:
-    src: backend.service # the playbook will check for backend.service only in ansible server. if the backend.service in remote host we need mention the full path.
+    src: backend.service.j2 # the playbook will check for backend.service only in ansible server. if the backend.service in remote host we need mention the full path.
     dest: /etc/systemd/system/backend.service
 
 - name: Load the schema into MySQL
