@@ -1,0 +1,5 @@
+- name: expence project frontend server setup
+  hosts: frontend
+  become: yes
+  roles:
+  - frontend
