@@ -1,0 +1,70 @@
+
+- name: install python libs
+  ansible.builtin.pip:
+    name: "{{ item }}"
+    executable: pip3.9
+  loop:
+    - PyMySQL
+    - cryptography
+
+- name: Disable Node.js module
+  ansible.builtin.command:
+    cmd: "dnf module disable nodejs -y"
+
+- name: enable nodejs:20
+  ansible.builtin.command:
+    cmd: "dnf module enable nodejs:20 -y"
+
+- name: install node js
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: installed
+  loop:
+    - nodejs
+    - mysql
+    - zip
+
+- name: Create a user 'expense' with a home directory
+  ansible.builtin.user:
+    name: expense
+  
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: /app
+    state: directory      
+
+- name: download backend content
+  ansible.builtin.get_url:
+    url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+    dest: /tmp/backend.zip
+
+- name: unzip backend code
+  ansible.builtin.unarchive:
+    src: /tmp/backend.zip
+    dest: /app
+    remote_src: yes
+
+- name: Install packages based on package.json.
+  community.general.npm:
+    path: /app
+
+- name: Copy backemd.service file from ansible to remote server 
+  ansible.builtin.templates:
+    src: backend.service # the playbook will check for backend.service only in ansible server. if the backend.service in remote host we need mention the full path.
+    dest: /etc/systemd/system/backend.service
+
+- name: Load the schema into MySQL
+  community.mysql.mysql_db:
+    name: all
+    state: import
+    target: /app/schema/backend.sql
+    login_host: "{{ MYSQL_HOST }}"
+    login_user: root
+    login_password: "{{ mysql_root_pwd }}"
+
+- name: daemon reload,enabled and restart the backend.server
+  ansible.builtin.systemd_service:
+    name: backend.service 
+    daemon_reload: yes 
+    enabled: yes 
+    state: restarted
