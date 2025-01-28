@@ -31,7 +31,7 @@
 - name: common roles 
   include_role:
     name: common
-    tasks_from: cmn_main
+    tasks_from: main
 
   
 # - name: Create a directory if it does not exist

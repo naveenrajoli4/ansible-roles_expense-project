@@ -1,15 +1,16 @@
 - name: delete existing directory
   ansible.builtin.file:
-    path: {{ APP_LOCATION }}
+    path: "{{ APP_LOCATION }}"
     state: absent      
 
 - name: Create a directory if it does not exist
   ansible.builtin.file:
-    path: {{ APP_LOCATION }}
+    path: "{{ APP_LOCATION }}"
     state: directory      
 
 - name: download backend/frontend content
   ansible.builtin.unarchive:
-    src: https://expense-builds.s3.us-east-1.amazonaws.com/expense-{{ COMPONENT }}-v2.zip
-    dest: {{ APP_LOCATION }}
+    src: "https://expense-builds.s3.us-east-1.amazonaws.com/expense-{{ COMPONENT }}-v2.zip"
+    dest: "{{ APP_LOCATION }}"
+    remote_src: yes
 
