@@ -4,6 +4,8 @@
     state: installed
 
 - name: enable and start nginx
+  tags:
+    - restart_nginx_service
   ansible.builtin.service:
     name: nginx
     state: started
