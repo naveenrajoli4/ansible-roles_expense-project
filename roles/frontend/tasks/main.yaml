@@ -5,13 +5,13 @@
 
 - name: enable and start nginx
   # tags:
-  #   - restart_nginx_service
+  # - restart_nginx_service
   ansible.builtin.service:
     name: nginx
     state: started
     enabled: yes
 
-- name: common roles 
+- name: common roles
   include_role:
     name: common
     tasks_from: main
