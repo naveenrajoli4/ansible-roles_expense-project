@@ -8,7 +8,7 @@
     path: {{ APP_LOCATION }}
     state: directory      
 
-- name: download backend content
+- name: download backend/frontend content
   ansible.builtin.unarchive:
     src: https://expense-builds.s3.us-east-1.amazonaws.com/expense-{{ COMPONENT }}-v2.zip
     dest: {{ APP_LOCATION }}
