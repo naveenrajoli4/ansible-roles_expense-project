@@ -12,6 +12,8 @@
     enabled: yes
 
 - name: common roles
+  tags: 
+  - tags-practice
   include_role:
     name: common
     tasks_from: main
