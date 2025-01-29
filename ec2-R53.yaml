@@ -1,5 +1,5 @@
 - name: Launch EC2 instance with a Community AMI
   connection: local
-  hosts: local
+  # hosts: local
   roles:
   - ec2r53
