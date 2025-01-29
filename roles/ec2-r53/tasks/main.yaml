@@ -1,53 +1,53 @@
 - name: installing required packages for ansible
-    ansible.builtin.pip:
-      name: "{{ item }}"
-      executable: pip3.9
-    loop:
-    - PyMySQL
-    - cryptography
-    - boto
-    - boto3
+  ansible.builtin.pip:
+    name: "{{ item }}"
+    executable: pip3.9
+  loop:
+  - PyMySQL
+  - cryptography
+  - boto
+  - boto3
 
-  - name: Launch a new EC2 instance
-    amazon.aws.ec2_instance:
-      name: "{{ item }}"
-      instance_type: "{{ instances_type }}"
-      image_id: "{{ img_id }}"  # Replace with your Community AMI ID
-      security_groups: "{{ security_groups_ID }}"         # Name of the security group
-      subnet_id: "{{ subnet_ID }}"
-    loop: "{{ instances }}"
-    register: ec2info
+- name: Launch a new EC2 instance
+  amazon.aws.ec2_instance:
+    name: "{{ item }}"
+    instance_type: "{{ instances_type }}"
+    image_id: "{{ img_id }}"  # Replace with your Community AMI ID
+    security_groups: "{{ security_groups_ID }}"         # Name of the security group
+    subnet_id: "{{ subnet_ID }}"
+  loop: "{{ instances }}"
+  register: ec2info
 
-  # - name: print ec2 information
-  #   ansible.builtin.debug:
-  #     msg: "{{ ec2info }}"
+# - name: print ec2 information
+#   ansible.builtin.debug:
+#     msg: "{{ ec2info }}"
 
-  - name: print private IPs
-    ansible.builtin.debug:
-      msg: "{{ item.instances[0].private_ip_address }}"
-    loop: "{{ ec2info.results }}"
+- name: print private IPs
+  ansible.builtin.debug:
+    msg: "{{ item.instances[0].private_ip_address }}"
+  loop: "{{ ec2info.results }}"
 
-  - name: create private IP addtesses
-    amazon.aws.route53:
-      state: present
-      zone: "{{ zone }}"
-      type: A
-      record: "{{ item.item }}.{{ zone }}"
-      ttl: 1
-      value: "{{ item.instances[0].private_ip_address }}"
-      wait: true
-      overwrite: true
-    loop: "{{ ec2info.results }}"
+- name: create private IP addtesses
+  amazon.aws.route53:
+    state: present
+    zone: "{{ zone }}"
+    type: A
+    record: "{{ item.item }}.{{ zone }}"
+    ttl: 1
+    value: "{{ item.instances[0].private_ip_address }}"
+    wait: true
+    overwrite: true
+  loop: "{{ ec2info.results }}"
 
-  - name: create public IP addtesses
-    amazon.aws.route53:
-      state: present
-      zone: "{{ zone }}"
-      type: A
-      record: "{{ zone }}"
-      ttl: 1
-      value: "{{ item.instances[0].public_ip_address }}"
-      wait: true
-      overwrite: true
-    loop: "{{ ec2info.results }}"
-    when: item.item == "frontendserver"
+- name: create public IP addtesses
+  amazon.aws.route53:
+    state: present
+    zone: "{{ zone }}"
+    type: A
+    record: "{{ zone }}"
+    ttl: 1
+    value: "{{ item.instances[0].public_ip_address }}"
+    wait: true
+    overwrite: true
+  loop: "{{ ec2info.results }}"
+  when: item.item == "frontendserver"
