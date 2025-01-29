@@ -2,7 +2,7 @@
   hosts: mysqlserver
   become: yes
   vars_files:
-  - roles/mysql/vars.yaml
+  - roles/mysql/vars/vault.yaml
   roles:
   - mysql
   
