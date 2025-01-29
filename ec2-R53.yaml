@@ -2,4 +2,4 @@
   connection: local
   hosts: local
   roles:
-  - ec2-r53
+  - ec2r53
