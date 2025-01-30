@@ -51,5 +51,3 @@
     overwrite: true
   loop: "{{ ec2info.results }}"
   when: item.item == "kdpfrontprod03"
-  tags:
-  - pubip
