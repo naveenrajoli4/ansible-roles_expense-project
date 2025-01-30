@@ -5,5 +5,5 @@
     zone: naveenrajoli.site
     instances:
     - kdpsqlprod01
-    # - kdpbackprod02
-    # - kdpfrontprod03
+    - kdpbackprod02
+    - kdpfrontprod03

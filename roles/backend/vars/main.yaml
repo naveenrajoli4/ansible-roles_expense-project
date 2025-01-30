@@ -1,4 +1,4 @@
 MYSQL_HOST: kdpsqlprod01.naveenrajoli.site
-mysql_root_pwd: ExpenseApp@1
+# mysql_root_pwd: ExpenseApp@1
 APP_LOCATION: /app
 COMPONENT: backend

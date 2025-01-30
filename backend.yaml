@@ -1,5 +1,7 @@
 - name: expence project backend server setup using roles
   hosts: backend
   become: yes
+  vars_files:
+  - roles/mysql/vars/vault.yaml
   roles:
   - backend
